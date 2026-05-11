@@ -22,37 +22,42 @@ jobs:
         run: npm run build
 
       - name: Create config.json
+        env:
+          MS_EMAIL: ${{ secrets.MS_EMAIL }}
+          MS_PASSWORD: ${{ secrets.MS_PASSWORD }}
         run: |
-          node -e "
-          const config = {
-            accounts: [{ username: '${{ secrets.MS_EMAIL }}', password: '${{ secrets.MS_PASSWORD }}' }],
-            baseURL: 'https://rewards.bing.com',
-            sessionPath: 'sessions',
-            headless: 'new',
-            runOnZeroPoints: false,
-            clusters: 1,
-            saveFingerprint: { mobile: false, desktop: false },
-            workers: {
-              doDailySet: true,
-              doMorePromotions: true,
-              doPunchCards: true,
-              doDesktopSearch: true,
-              doMobileSearch: true
+          python3 << 'PYEOF'
+          import json, os
+          config = {
+            "accounts": [{"username": os.environ["MS_EMAIL"], "password": os.environ["MS_PASSWORD"]}],
+            "baseURL": "https://rewards.bing.com",
+            "sessionPath": "sessions",
+            "headless": "new",
+            "runOnZeroPoints": False,
+            "clusters": 1,
+            "saveFingerprint": {"mobile": False, "desktop": False},
+            "workers": {
+              "doDailySet": True,
+              "doMorePromotions": True,
+              "doPunchCards": True,
+              "doDesktopSearch": True,
+              "doMobileSearch": True
             },
-            searchSettings: {
-              useGeoLocaleQueries: false,
-              scrollRandomly: true,
-              scrollDelay: 2000,
-              searchDelay: 3000,
-              retryMobileSearchAmount: 0
+            "searchSettings": {
+              "useGeoLocaleQueries": False,
+              "scrollRandomly": True,
+              "scrollDelay": 2000,
+              "searchDelay": 3000,
+              "retryMobileSearchAmount": 0
             },
-            debugLogs: false,
-            proxy: {},
-            consoleLogFilter: {},
-            webhook: {}
-          };
-          require('fs').writeFileSync('dist/config.json', JSON.stringify(config, null, 2));
-          "
+            "debugLogs": False,
+            "proxy": {},
+            "consoleLogFilter": {},
+            "webhook": {}
+          }
+          with open("dist/config.json", "w") as f:
+            json.dump(config, f, indent=2)
+          PYEOF
             }
           }
           EOF
