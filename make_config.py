@@ -25,8 +25,18 @@ config = {
         "searchDelay": {"min": "3min", "max": "5min"},
         "retryMobileSearchAmount": 0
     },
+    "proxy": {
+        "url": "",
+        "port": 0,
+        "username": "",
+        "password": ""
+    },
     "consoleLogFilter": {"mode": "blacklist", "keywords": []},
-    "webhook": {"enabled": False, "url": ""}
+    "webhook": {
+        "enabled": False,
+        "url": "",
+        "webhookLogFilter": {"mode": "blacklist", "keywords": []}
+    }
 }
 
 with open("dist/config.json", "w") as f:
@@ -37,4 +47,4 @@ accounts = [{"email": os.environ.get("MS_EMAIL", ""), "password": os.environ.get
 with open("dist/accounts.json", "w") as f:
     json.dump(accounts, f, indent=2)
 
-print("config.json and accounts.json created!")
+print("Done!")
