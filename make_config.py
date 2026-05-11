@@ -32,8 +32,8 @@ config = {
     "enabled": True,
     "debugLogs": False,
     "proxy": None,
-    "consoleLogFilter": None,
-    "webhook": None
+    "consoleLogFilter": {},
+    "webhook": {}
 }
 
 with open("dist/config.json", "w") as f:
