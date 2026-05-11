@@ -23,25 +23,36 @@ jobs:
 
       - name: Create config.json
         run: |
-          cat > dist/config.json << EOF
-          {
-            "accounts": [
-              {
-                "username": "${{ secrets.MS_EMAIL }}",
-                "password": "${{ secrets.MS_PASSWORD }}"
-              }
-            ],
-            "baseURL": "https://rewards.bing.com",
-            "sessionPath": "sessions",
-            "headless": "new",
-            "runOnZeroPoints": false,
-            "clusters": 1,
-            "workers": {
-              "doDailySet": true,
-              "doMorePromotions": true,
-              "doPunchCards": true,
-              "doDesktopSearch": true,
-              "doMobileSearch": true
+          node -e "
+          const config = {
+            accounts: [{ username: '${{ secrets.MS_EMAIL }}', password: '${{ secrets.MS_PASSWORD }}' }],
+            baseURL: 'https://rewards.bing.com',
+            sessionPath: 'sessions',
+            headless: 'new',
+            runOnZeroPoints: false,
+            clusters: 1,
+            saveFingerprint: { mobile: false, desktop: false },
+            workers: {
+              doDailySet: true,
+              doMorePromotions: true,
+              doPunchCards: true,
+              doDesktopSearch: true,
+              doMobileSearch: true
+            },
+            searchSettings: {
+              useGeoLocaleQueries: false,
+              scrollRandomly: true,
+              scrollDelay: 2000,
+              searchDelay: 3000,
+              retryMobileSearchAmount: 0
+            },
+            debugLogs: false,
+            proxy: {},
+            consoleLogFilter: {},
+            webhook: {}
+          };
+          require('fs').writeFileSync('dist/config.json', JSON.stringify(config, null, 2));
+          "
             }
           }
           EOF
