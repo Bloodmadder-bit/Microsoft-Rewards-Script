@@ -2,10 +2,15 @@ import json
 import os
 
 config = {
-    "accounts": [{"username": os.environ.get("MS_EMAIL", ""), "password": os.environ.get("MS_PASSWORD", "")}],
+    "accounts": [
+        {
+            "username": os.environ.get("MS_EMAIL", ""),
+            "password": os.environ.get("MS_PASSWORD", "")
+        }
+    ],
     "baseURL": "https://rewards.bing.com",
     "sessionPath": "sessions",
-    "headless": "new",
+    "headless": True,
     "runOnZeroPoints": False,
     "clusters": 1,
     "saveFingerprint": {"mobile": False, "desktop": False},
@@ -23,10 +28,12 @@ config = {
         "searchDelay": 3000,
         "retryMobileSearchAmount": 0
     },
+    "globalTimeout": 30,
+    "enabled": True,
     "debugLogs": False,
-    "proxy": {},
-    "consoleLogFilter": {},
-    "webhook": {}
+    "proxy": None,
+    "consoleLogFilter": None,
+    "webhook": None
 }
 
 with open("dist/config.json", "w") as f:
