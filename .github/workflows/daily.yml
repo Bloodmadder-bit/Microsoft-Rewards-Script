@@ -21,8 +21,30 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Create config.json
+        run: |
+          cat > dist/config.json << EOF
+          {
+            "accounts": [
+              {
+                "username": "${{ secrets.MS_EMAIL }}",
+                "password": "${{ secrets.MS_PASSWORD }}"
+              }
+            ],
+            "baseURL": "https://rewards.bing.com",
+            "sessionPath": "sessions",
+            "headless": "new",
+            "runOnZeroPoints": false,
+            "clusters": 1,
+            "workers": {
+              "doDailySet": true,
+              "doMorePromotions": true,
+              "doPunchCards": true,
+              "doDesktopSearch": true,
+              "doMobileSearch": true
+            }
+          }
+          EOF
+
       - name: Run script
-        env:
-          MS_EMAIL: ${{ secrets.MS_EMAIL }}
-          MS_PASSWORD: ${{ secrets.MS_PASSWORD }}
         run: npm start
